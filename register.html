@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="log-in-container">
+    <div class="log-in-header">
+        <h3>Register</h3>
+    </div>
+    <form class="login-form">
+        <input type="text" placeholder="User name" id="username" required minlength="3" maxlength="30"/>
+        <input type="email" placeholder="E-mail" id="email" minlength="5" required/>
+        <input type="password" placeholder="Password" id="password" required minlength="8" maxlength="30"/>
+        <input type="password" placeholder="Re Password" id="re-password" required minlength="8" maxlength="30"/>
+        <button type="submit">Register</button>
+        <a href="login.html">Click here to Login</a>
+    </form>
+</div>
+<script>
+    // select the form element
+    const form = document.querySelector('.login-form');
+
+    // add an event listener to the form's submit button
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent the form from submitting normally
+
+        if (document.querySelector('#re-password').value !== document.querySelector('#password').value) {
+            alert('Password does not match');
+            formClear();
+            return;
+        }
+
+
+        // extract the form data into an object
+        const formData = {
+            username: document.querySelector('#username').value,
+            email: document.querySelector('#email').value,
+            password: document.querySelector('#password').value,
+        };
+        let existingData;
+
+        if (localStorage.getItem('registrationData')) {
+            existingData = JSON.parse(localStorage.getItem('registrationData'));
+        } else {
+            existingData = [];
+        }
+        for (let i = 0; i < existingData.length; i++) {
+            if (existingData[i].email === formData.email || existingData[i].username === formData.username) {
+                alert('User already exists');
+                formClear();
+                return;
+            }
+        }
+
+        existingData.push(formData);
+
+        // save the merged data to local storage
+        localStorage.setItem('registrationData', JSON.stringify(existingData));
+
+        // display a success message
+        alert('Registration saved successfully!');
+        formClear();
+
+        window.location.href = 'login.html';
+    });
+
+    const formClear = () => {
+        document.querySelector('#password').value = '';
+        document.querySelector('#re-password').value = '';
+    }
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="log-in-container">
+    <div class="log-in-header">
+        <h3>Please Sign In</h3>
+    </div>
+    <form class="login-form">
+        <input type="email" placeholder="E-mail" id="email" minlength="5" maxlength="50" required />
+        <input type="password" placeholder="Password" id="password" minlength="8" maxlength="30" required/>
+        <div class="login-item">
+            <input type="checkbox" id="remember-checkbox" class="login-item-input-btn"/>
+            <label for="remember-checkbox" class="login-item-input">Remember me</label>
+        </div>
+
+        <button type="submit">Login </button>
+        <a href="register.html">Click here to Register</a>
+    </form>
+</div>
+<script>
+    // select the form element
+    const form = document.querySelector('.login-form');
+
+    // add an event listener to the form's submit button
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // prevent the form from submitting normally
+
+        // extract the form data into an object
+        const formData = {
+            email: document.querySelector('#email').value,
+            password: document.querySelector('#password').value,
+        };
+
+        let existingData;
+
+        if (localStorage.getItem('registrationData')) {
+            existingData = JSON.parse(localStorage.getItem('registrationData'));
+        } else {
+            existingData = [];
+        }
+
+        for (let i = 0; i < existingData.length; i++) {
+            if (existingData[i].email === formData.email && existingData[i].password === formData.password) {
+                alert('Login successful');
+                formClear();
+                // save the user's email to edit-profile.html
+                localStorage.setItem('currentUser', formData.email);
+                // redirect to edit-profile page
+                window.location.href = 'edit-profile.html';
+                return;
+            }
+        }
+        alert('User does not exist or password is incorrect');
+        formClear();
+    });
+
+    function formClear() {
+        document.querySelector('#email').value = '';
+        document.querySelector('#password').value = '';
+    }
+</script>
+</body>
+</html>
